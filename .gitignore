@@ -1,3 +1,4 @@
 
 *.TBB
 *.dat
+__pycache__
