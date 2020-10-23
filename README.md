@@ -12,3 +12,4 @@ You may need to create virtualenv first [virtualenv](https://docs.python-guide.o
 ```bash
 workon ...
 ```
+before doing pip install
