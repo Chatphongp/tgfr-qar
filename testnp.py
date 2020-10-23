@@ -66,32 +66,32 @@ alt = vGetValue(
     coeff=0.32,
 )
 
-result = {}
-for k, v in conf.interested_data.items():
-    if v:
+# result = {}
+# for k, v in conf.interested_data.items():
+#     if v:
 
-        dataframe = conf.dataframe[k]
-        signed_bit = 0
-        if dataframe["sign"]:
-            signed_bit = 12
-        result[k] = vGetValue(
-            vRemoveFirstByte(np_data_matrix[:, dataframe["word"]]),
-            dataframe["start_bit"] - 1,
-            dataframe["record_length"],
-            dataframe["record_resolution"],
-            signed_bit,
-        )
+#         dataframe = conf.dataframe[k]
+#         signed_bit = 0
+#         if dataframe["sign"]:
+#             signed_bit = 12
+#         result[k] = vGetValue(
+#             vRemoveFirstByte(np_data_matrix[:, dataframe["word"]]),
+#             dataframe["start_bit"] - 1,
+#             dataframe["record_length"],
+#             dataframe["record_resolution"],
+#             signed_bit,
+#         )
 
 index = list(item for item in range(len(gs)))
 
 
-for gs in result["VERTICAL_SPEED_25"]:
-    datalogger.write_log(gs)
+# for gs in result["VERTICAL_SPEED_25"]:
+#     datalogger.write_log(gs)
 # print(len(result["GROUND_SPEED"]))
-# plt.plot(index, gs, label="GS (kts)")
-# plt.plot(index, alt, label="ALT (FL)")
-# plt.legend()
-# plt.show()
+plt.plot(index, gs, label="GS (kts)")
+plt.plot(index, alt, label="ALT (FL)")
+plt.legend()
+plt.show()
 
 
 print("--- %s seconds ---" % (time.time() - start_time))
