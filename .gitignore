@@ -3,3 +3,4 @@
 *.dat
 __pycache__
 output/data_logs.txt
+.vscode
