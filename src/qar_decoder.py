@@ -2,10 +2,16 @@ import numpy as np
 from termcolor import colored
 
 
-def twos_complement(input_value: int, num_bits: int) -> int:
-    """Calculates a two's complement integer from the given input value's bits."""
-    mask = 2 ** (num_bits - 1)
-    return -(input_value & mask) + (input_value & ~mask)
+# def twos_complement(input_value: int, num_bits: int) -> int:
+#     """Calculates a two's complement integer from the given input value's bits."""
+#     mask = 2 ** (num_bits - 1)
+#     return -(input_value & mask) + (input_value & ~mask)
+
+
+def twos_complement(val, bits):
+    if (val & (1 << (bits - 1))) != 0:
+        val = val - (1 << bits)
+    return val
 
 
 def v_twos_complement(val, bits):
