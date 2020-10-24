@@ -1,6 +1,8 @@
 # tgfr-qar
 
-## RUN at project folder /tgfr-qar
+## Using Python only
+
+### RUN at project folder /tgfr-qar
 
 This will use a default file raw.dat as an input file.
 
@@ -14,7 +16,7 @@ or for a specific file name. The file path is related to your current location.
 python src/main.py ./data/raw.dat
 ```
 
-## Prerequisites
+### Prerequisites
 
 ```bash
 pip install -r requirements.txt
@@ -28,8 +30,36 @@ workon ...
 
 before doing pip install
 
-## Running tests
+### Running tests
 
 ```bash
 python -m unittest -b src/tests/*.py
+```
+
+
+## Using Docker
+
+### Prerequisite
+* Install Docker
+  * Ubuntu
+    https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+  * Mac & Windows
+    https://docs.docker.com/get-docker/
+
+* Install Docker Compose
+https://docs.docker.com/compose/install/
+
+* Install make cmd
+  * Ubuntu
+    ```bash
+    sudo apt-get install build-essential
+    ```
+  * Others
+    ```bash
+    not sure T-T
+    ```
+
+### Run Tests
+```bash
+make tests
 ```
