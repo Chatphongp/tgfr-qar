@@ -9,49 +9,52 @@ import seaborn as sns
 
 start_time = time.time()
 
-smoothingScale = 4 ## 2 sec per sample
+smoothingScale = 4  ## 2 sec per sample
 
-with open('TBA200927-200928.dat', 'rb') as f:
+with open("./data/raw.dat", "rb") as f:
     f.read(0)
     b = f.read()
     f.close()
 
+
 def twos_complement(val, bits):
-    if (val & (1 << (bits - 1))) != 0: 
-        val = val - (1 << bits)        
+    if (val & (1 << (bits - 1))) != 0:
+        val = val - (1 << bits)
     return val
+
 
 vTwoComplement = np.vectorize(twos_complement)
 
+
 def GetValue_np(arr, bitStart, bitLength, coeff, signedBit):
     arr = np.bitwise_and(arr, 0xFFF)
-    mask = (2** bitLength) - 1
+    mask = (2 ** bitLength) - 1
     arr = np.right_shift(arr, bitStart)
     masked = np.bitwise_and(arr, mask)
-    if (signedBit):
-        return np.multiply(vTwoComplement(masked, signedBit) , coeff)
+    if signedBit:
+        return np.multiply(vTwoComplement(masked, signedBit), coeff)
     else:
         return masked * coeff
 
+
 def Validate(arr):
     arr = arr[:, 0]
-    SYNC_WORD_HEX = [0x247, 0x5b8, 0xa47, 0xdb8]
+    SYNC_WORD_HEX = [0x247, 0x5B8, 0xA47, 0xDB8]
 
     for i in range(4):
         syncWord = arr[i::4]
 
-        if ( (syncWord == SYNC_WORD_HEX[i]).all()):
-            print(colored('WORD ' +str(i) +' PASSED', 'green'))
+        if (syncWord == SYNC_WORD_HEX[i]).all():
+            print(colored("WORD " + str(i) + " PASSED", "green"))
         else:
-            print(colored('WORD ' + str(i) + ' FAILED', 'red'))
-
+            print(colored("WORD " + str(i) + " FAILED", "red"))
 
 
 ## read int16 from file buffer
 np_data = np.frombuffer(b, dtype=np.int16)
 
 ## reshape vector to maxtrix with col = 512 (512 words)
-data = np_data.reshape([ -1, 512 ])
+data = np_data.reshape([-1, 512])
 data = data[:20000, :]
 
 print("Frame Size ", data.shape)
@@ -59,28 +62,32 @@ print("Frame Size ", data.shape)
 Validate(data)
 
 start_time = time.time()
-cas = GetValue_np(data[0::2, 484], bitStart = 0, bitLength = 12, signedBit=  0, coeff = 0.125)
+cas = GetValue_np(data[0::2, 484], bitStart=0, bitLength=12, signedBit=0, coeff=0.125)
 
-flaps = GetValue_np(data[0::2, 224], bitStart = 4, bitLength = 8, signedBit=  0, coeff = 0.25)
+flaps = GetValue_np(data[0::2, 224], bitStart=4, bitLength=8, signedBit=0, coeff=0.25)
 
-masterSW1 = GetValue_np(data[1::2, 316], bitStart = 1, bitLength = 1, signedBit=  0, coeff = 1)
+masterSW1 = GetValue_np(data[1::2, 316], bitStart=1, bitLength=1, signedBit=0, coeff=1)
 
-masterSW2 = GetValue_np(data[0::2, 314], bitStart = 1, bitLength = 1, signedBit=  0, coeff = 1)
+masterSW2 = GetValue_np(data[0::2, 314], bitStart=1, bitLength=1, signedBit=0, coeff=1)
 
-ff1 = GetValue_np(data[0::2, 38], bitStart = 0, bitLength = 12, signedBit=  0, coeff = 1)
-ff2 = GetValue_np(data[0::2, 294], bitStart = 0, bitLength = 12, signedBit=  0, coeff = 1)
-
-
-packcon1 = GetValue_np(data[0::2, 58], bitStart = 0, bitLength = 1, signedBit=  0, coeff = 1)
-packcon2 = GetValue_np(data[1::2, 58], bitStart = 0, bitLength = 1, signedBit=  0, coeff = 1)
+ff1 = GetValue_np(data[0::2, 38], bitStart=0, bitLength=12, signedBit=0, coeff=1)
+ff2 = GetValue_np(data[0::2, 294], bitStart=0, bitLength=12, signedBit=0, coeff=1)
 
 
-n1eng1 = GetValue_np(data[0::2, 22], bitStart = 0, bitLength = 12, signedBit=  0, coeff = 0.03125 )
-n1eng2 = GetValue_np(data[0::2, 278], bitStart = 0, bitLength = 12, signedBit=  0, coeff = 0.03125)
+packcon1 = GetValue_np(data[0::2, 58], bitStart=0, bitLength=1, signedBit=0, coeff=1)
+packcon2 = GetValue_np(data[1::2, 58], bitStart=0, bitLength=1, signedBit=0, coeff=1)
 
 
-nosesw = GetValue_np(data[0::2, 86], bitStart = 3, bitLength = 1, signedBit=  0, coeff = 1)
-lhsw = GetValue_np(data[0::2, 86], bitStart = 1, bitLength = 1, signedBit=  0, coeff = 1)
+n1eng1 = GetValue_np(
+    data[0::2, 22], bitStart=0, bitLength=12, signedBit=0, coeff=0.03125
+)
+n1eng2 = GetValue_np(
+    data[0::2, 278], bitStart=0, bitLength=12, signedBit=0, coeff=0.03125
+)
+
+
+nosesw = GetValue_np(data[0::2, 86], bitStart=3, bitLength=1, signedBit=0, coeff=1)
+lhsw = GetValue_np(data[0::2, 86], bitStart=1, bitLength=1, signedBit=0, coeff=1)
 print("Numpy---\t\t\t %s seconds ---" % (time.time() - start_time))
 
 index = list(item for item in range(len(ff1)))
@@ -130,12 +137,9 @@ for a in ax:
 fig.tight_layout()
 """
 sns.set()
-plt.plot(index, flaps, label= 'flaps')
-plt.plot(index, n1eng1, label= 'n1eng1')
-plt.plot(index, n1eng2, label= 'n1eng2')
+plt.plot(index, flaps, label="flaps")
+plt.plot(index, n1eng1, label="n1eng1")
+plt.plot(index, n1eng2, label="n1eng2")
 plt.legend()
 plt.tight_layout()
 plt.show()
-
-
-
