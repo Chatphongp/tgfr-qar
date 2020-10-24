@@ -3,6 +3,7 @@ import time
 import matplotlib.pyplot as plt
 import array
 import numpy as np
+import numexpr as ne
 import pandas as pd
 import math
 
@@ -27,7 +28,7 @@ def GetValue (raw, bitStart, bitLength, coeff, signedBit):
     masked = raw & mask
 
     if (signedBit):
-        return twos_complement(masked, 12) * coeff
+        return twos_complement(masked, signedBit) * coeff
     else:
         return masked * coeff
 
@@ -48,6 +49,7 @@ gs = vGetValue(vRemoveFirstByte(np_data_matrix[:, 1]) ,bitStart = 0, bitLength =
 
 ## Altitude Word 123, bitLength = 12 (included sign) , coeff  = 32; use 0.32 to scale down
 alt = vGetValue(vRemoveFirstByte(np_data_matrix[:, 123]), bitStart = 0, bitLength = 12, signedBit=  12, coeff = 0.32)
+
 
 
 index = list(item for item in range(len(gs)))

@@ -1,3 +1,4 @@
 
 *.TBB
 *.dat
+.vscode/settings.json
