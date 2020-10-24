@@ -1,6 +1,6 @@
 
 *.TBB
-*.dat
+data/*.dat
 __pycache__
 output/data_logs.txt
 .vscode
