@@ -46,7 +46,7 @@ def get_int16(buffer):
     return np.frombuffer(buffer, dtype=np.int16)
 
 
-def get_reshape_vector_to_subframe_matix(buffer):
+def get_reshape_vector_to_subframe_matrix(buffer):
     np_data = get_int16(buffer)
     data = np_data.reshape([-1, 512])
     data = data[:20000, :]

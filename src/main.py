@@ -11,7 +11,7 @@ def main(raw_filename: str):
         f.read(0)
         b = f.read()
         f.close()
-    data = qd.get_reshape_vector_to_subframe_matix(b)
+    data = qd.get_reshape_vector_to_subframe_matrix(b)
 
     print("Frame Size ", data.shape)
 
