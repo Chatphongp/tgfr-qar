@@ -4,7 +4,10 @@ from src import qar_decoder as qd
 
 
 class TestTwoComplements(unittest.TestCase):
+    def _get_int_from_binary_str(self, bin_val):
+        return int(bin_val, 2)
+
     def test_two_complements(self):
-        val = int("10000000", 2)
+        val = self._get_int_from_binary_str("10000000")
         result = qd.twos_complement(val, 8)
         self.assertEqual(result, -128)
