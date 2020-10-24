@@ -23,6 +23,10 @@ def twos_complement(val, bits):
     return val
 
 
+def v_twos_complement(val, bits):
+    return np.vectorize(twos_complement)
+
+
 vTwoComplement = np.vectorize(twos_complement)
 
 
@@ -50,8 +54,20 @@ def Validate(arr):
             print(colored("WORD " + str(i) + " FAILED", "red"))
 
 
+def get_int16(buffer):
+    return np.frombuffer(b, dtype=np.int16)
+
+
 ## read int16 from file buffer
 np_data = np.frombuffer(b, dtype=np.int16)
+
+
+def get_reshape_vector_to_subframe_matix(buffer):
+    np_data = get_int16(buffer)
+    data = np_data.reshape([-1, 512])
+    data = data[:20000, :]
+    return data
+
 
 ## reshape vector to maxtrix with col = 512 (512 words)
 data = np_data.reshape([-1, 512])

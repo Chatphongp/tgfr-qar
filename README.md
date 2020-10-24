@@ -2,8 +2,16 @@
 
 ## RUN at project folder /tgfr-qar
 
+This will use a default file raw.dat as an input file.
+
 ```bash
-python src/test330.py
+python src/main.py
+```
+
+or for a specific file name. The file path is related to your current location.
+
+```bash
+python src/main.py ./data/raw.dat
 ```
 
 ## Prerequisites
