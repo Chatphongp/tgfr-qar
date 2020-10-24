@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  tgfr-qar:
+    image: tgfr-qar:${TAG_TGFR}
+    container_name: tgfr-qar
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    working_dir: "/opt/app/src"
+    ports:
+      - "9000:9000"
+    logging:
+      options:
+        max-size: 10m
+        max-file: "10"
+    expose:
+      - 9000

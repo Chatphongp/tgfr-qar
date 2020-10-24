@@ -1,5 +1,5 @@
 import unittest
-from src import qar_decoder as qd
+import qar_decoder as qd
 
 
 class TestTwoComplements(unittest.TestCase):
