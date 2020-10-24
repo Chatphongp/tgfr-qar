@@ -2,6 +2,12 @@ import numpy as np
 from termcolor import colored
 
 
+# def twos_complement(input_value: int, num_bits: int) -> int:
+#     """Calculates a two's complement integer from the given input value's bits."""
+#     mask = 2 ** (num_bits - 1)
+#     return -(input_value & mask) + (input_value & ~mask)
+
+
 def twos_complement(val, bits):
     if (val & (1 << (bits - 1))) != 0:
         val = val - (1 << bits)
@@ -40,7 +46,7 @@ def get_int16(buffer):
     return np.frombuffer(buffer, dtype=np.int16)
 
 
-def get_reshape_vector_to_subframe_matix(buffer):
+def get_reshape_vector_to_subframe_matrix(buffer):
     np_data = get_int16(buffer)
     data = np_data.reshape([-1, 512])
     data = data[:20000, :]
