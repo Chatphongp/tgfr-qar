@@ -31,5 +31,5 @@ before doing pip install
 ## Running tests
 
 ```bash
-python -m unittest -b tests/*.py
+python -m unittest -b src/tests/*.py
 ```
