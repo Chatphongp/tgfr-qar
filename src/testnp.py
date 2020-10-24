@@ -10,7 +10,7 @@ import datalogger
 
 start_time = time.time()
 
-with open("raw.dat", "rb") as f:
+with open("./data/raw.dat", "rb") as f:
     f.read(4096)
     b = f.read()
     f.close()
