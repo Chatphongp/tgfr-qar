@@ -15,9 +15,6 @@ with open('TBA200927-200928.dat', 'rb') as f:
     b = f.read()
     f.close()
 
-def RemoveFirstByte(arr):
-    return arr & 0xFFF
-
 def RemoveFirstByte_np(arr):
     return np.bitwise_and(arr, 0xFFF)
 
@@ -28,15 +25,6 @@ def twos_complement(val, bits):
 
 vTwoComplement = np.vectorize(twos_complement)
 
-def GetValue (raw, bitStart, bitLength, coeff, signedBit):
-    mask = (2 ** bitLength) - 1 ## eg. bitLength 11 = 0b11111111111 = 2047
-    raw = raw >> bitStart
-    masked = raw & mask
-
-    if (signedBit):
-        return twos_complement(masked, signedBit) * coeff
-    else:
-        return masked * coeff
 
 def GetValue_np(arr, bitStart, bitLength, coeff, signedBit):
     mask = (2** bitLength) - 1
@@ -47,17 +35,6 @@ def GetValue_np(arr, bitStart, bitLength, coeff, signedBit):
     else:
         return masked * coeff
 
-def CompareVector(vec1, vec2):
-    if ( (vec1 == vec2).all()):
-        print(colored("Test PASSED", "green"))
-    else:
-        print(colored("Test FAILED", "red"))
-
-## Vectorize Function
-
-vRemoveFirstByte = np.vectorize(RemoveFirstByte)
-vGetValue = np.vectorize(GetValue)
-
 ## read int16 from file buffer
 np_data = np.frombuffer(b, dtype=np.int16)
 
@@ -65,40 +42,7 @@ np_data = np.frombuffer(b, dtype=np.int16)
 np_data_matrix = np_data.reshape([ -1, 512 ])
 
 print("Frame Size ", np_data_matrix.shape)
-## TODO Verify Subframe order and subframe is valid 
-
-"""
-## GS Word 344 bitStart = 3, bitLength = 10, signedBit = 0, coeff = 1
-gs = vGetValue(vRemoveFirstByte(np_data_matrix[:, 344]), bitStart = 2, bitLength = 10, signedBit=  0, coeff = 1)
-"""
-
-
-start_time = time.time()
-cas = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 484]), bitStart = 0, bitLength = 12, signedBit=  0, coeff = 0.125)
-
-flaps = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 224]), bitStart = 4, bitLength = 8, signedBit=  0, coeff = 0.25)
-
-masterSW1 = vGetValue(vRemoveFirstByte(np_data_matrix[1::2, 316]), bitStart = 1, bitLength = 1, signedBit=  0, coeff = 1)
-
-masterSW2 = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 314]), bitStart = 1, bitLength = 1, signedBit=  0, coeff = 1)
-
-ff1_lsb = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 38]), bitStart = 0, bitLength = 12, signedBit=  0, coeff = 4)
-ff1_msb = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 36]), bitStart = 10, bitLength = 2, signedBit=  0, coeff = 4)
-
-ff2_lsb = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 294]), bitStart = 0, bitLength = 12, signedBit=  0, coeff = 4)
-ff2_msb = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 292]), bitStart = 10, bitLength = 2, signedBit=  0, coeff = 4)
-
-packcon1 = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 58]), bitStart = 0, bitLength = 1, signedBit=  0, coeff = 1)
-packcon2 = vGetValue(vRemoveFirstByte(np_data_matrix[1::2, 58]), bitStart = 0, bitLength = 1, signedBit=  0, coeff = 1)
-
-
-n1eng1 = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 22]), bitStart = 0, bitLength = 12, signedBit=  0, coeff = 0.03125)
-n1eng2 = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 278]), bitStart = 0, bitLength = 12, signedBit=  0, coeff = 0.03125)
-
-
-nosesw = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 86]), bitStart = 3, bitLength = 1, signedBit=  0, coeff = 1)
-lhsw = vGetValue(vRemoveFirstByte(np_data_matrix[0::2, 86]), bitStart = 1, bitLength = 1, signedBit=  0, coeff = 1)
-print("Native Vectorized ---\t\t %s seconds ---" % (time.time() - start_time))
+## TODO Verify Subframe order and subframe is valid
 
 start_time = time.time()
 cas_np = GetValue_np(RemoveFirstByte_np(np_data_matrix[0::2, 484]), bitStart = 0, bitLength = 12, signedBit=  0, coeff = 0.125)
@@ -143,15 +87,12 @@ lhsw = 1 - lhsw
 
 nose_air_min = np.min(np.where(nosesw == 1))
 nose_air_max = np.max(np.where(nosesw == 1))
-"""
 
 CompareVector(cas, cas_np)
 CompareVector(flaps, flaps_np)
 CompareVector(n1eng1, n1eng1_np)
 CompareVector(ff1_lsb, ff1_lsb_np)
 
-
-"""
 fig, ax = plt.subplots(6)
 ax[0].plot(index, flaps, label = "Flaps")
 
