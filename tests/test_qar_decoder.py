@@ -1,5 +1,4 @@
 import unittest
-import numpy as np
 from src import qar_decoder as qd
 
 
