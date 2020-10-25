@@ -27,7 +27,7 @@
 ### Run server at port 9000
 
 ```bash
-make build run
+make reset
 ```
 
 #### to inspect log of the docker
