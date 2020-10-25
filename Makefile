@@ -15,6 +15,7 @@ tests: build
 	docker run -it --rm --name tgfr-qar-tests tgfr-qar:${TAG_TGFR} bash -c "python -m pytest -vv ."
 
 reset: down build up
+	docker ps
 
 down:
 	docker-compose down

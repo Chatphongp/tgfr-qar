@@ -144,7 +144,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
 
-    PORT = settings.QR_DECODER_PORT
+    PORT = int(settings.QR_DECODER_PORT)
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("serving at port", PORT)
         httpd.serve_forever()

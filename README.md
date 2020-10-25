@@ -1,7 +1,5 @@
 # tgfr-qar
 
-## Using Python only
-
 ## Using Docker
 
 ### Prerequisite
@@ -44,7 +42,7 @@ docker logs -f "docker_id"
 make tests
 ```
 
-# Without Docker
+## Without Docker
 
 ### RUN at project folder /tgfr-qar
 

@@ -6,6 +6,8 @@ services:
     build:
       context: ./
       dockerfile: ./Dockerfile
+    volumes:
+      - "./data:/opt/app/raw"
     working_dir: "/opt/app/src"
     ports:
       - "9000:9000"
