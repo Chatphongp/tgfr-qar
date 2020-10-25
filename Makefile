@@ -4,7 +4,8 @@ export TAG_TGFR=$(shell git describe --always --tags --dirty)
 
 run:
 	docker rm -f tgfr-qar || echo ""
-	docker run -dit --name tgfr-qar -p 9000:9000 tgfr-qar:${TAG_TGFR}
+	docker run -dit --name tgfr-qar -p 9000:9000  \
+		tgfr-qar:${TAG_TGFR}
 	docker ps
 
 pull:

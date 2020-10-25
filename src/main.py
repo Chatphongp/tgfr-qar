@@ -1,8 +1,12 @@
 import time
 import sys
+import os
+import http.server
+import socketserver
 import seaborn as sns
 import matplotlib.pyplot as plt
 import qar_decoder as qd
+import settings
 
 
 def main(raw_filename: str):
@@ -119,10 +123,28 @@ def main(raw_filename: str):
     plt.show()
 
 
+PORT = 9000
+
+
+class Handler(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        path = self.path
+        if path == "/777":
+            os.system("ls -l")
+        elif path == "/330":
+            os.system("ls -la")
+        else:
+            if len(sys.argv) == 1:
+                filename = "./data/raw.dat"
+            else:
+                filename = sys.argv[1]
+            # filename = "./data/raw.dat"
+            main(filename)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) == 1:
-        filename = "./data/raw.dat"
-    else:
-        filename = sys.argv[1]
-    # filename = "./data/raw.dat"
-    main(filename)
+
+    PORT = settings.QR_DECODER_PORT
+    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+        print("serving at port", PORT)
+        httpd.serve_forever()
