@@ -15,3 +15,5 @@ services:
         max-file: "10"
     expose:
       - 9000
+    environment:
+      - QR_DECODER_PORT=9000
